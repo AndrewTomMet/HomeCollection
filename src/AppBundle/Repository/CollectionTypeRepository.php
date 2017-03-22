@@ -2,8 +2,9 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
 
-class CollectionTypeRepository
+class CollectionTypeRepository extends EntityRepository
 {
 
 }

@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Class Collection
@@ -27,7 +28,7 @@ class CollectionItem
      * тип ітема (серіал, кремінал, комедія) (онлайн, офлайн)
      * @ORM\ManyToMany(targetEntity="ItemType", mappedBy="collectionItems")
      */
-    private $itemTypes;
+    private $itemType;
     /**
      * Англійска назва
      * @ORM\Column(type="string", length=100, nullable=false)
@@ -41,8 +42,13 @@ class CollectionItem
     private $nameUkr;
     /**
      * рік створення
-     * @ORM\Column(type="date", nullable=true)
-     * @Assert\Date()
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Range(
+     *      min = 1900,
+     *      max = 3000,
+     *      minMessage = "Не меньше ніж {{ limit }}",
+     *      maxMessage = "Не більше ніж {{ limit }}"
+     * )
      */
     private $year;
     /**
@@ -59,13 +65,14 @@ class CollectionItem
      * переводи
      * @ORM\ManyToMany(targetEntity="Translation", mappedBy="collectionItems")
      */
-    private $translations;
+    private $translation;
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $pathLocal;
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Url()
      */
     private $pathDownload;
     /**
@@ -109,12 +116,24 @@ class CollectionItem
     private $completedAt;
 
     /**
+     * @ORM\Column(type="blob", nullable=true)
+     * @Assert\Image(
+     *     minWidth = 200,
+     *     maxWidth = 400,
+     *     minHeight = 200,
+     *     maxHeight = 400
+     * )
+     */
+    private $image;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->itemTypes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->itemType = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     /**
@@ -178,7 +197,7 @@ class CollectionItem
     /**
      * Set year
      *
-     * @param \DateTime $year
+     * @param int $year
      *
      * @return CollectionItem
      */
@@ -192,7 +211,7 @@ class CollectionItem
     /**
      * Get year
      *
-     * @return \DateTime
+     * @return int
      */
     public function getYear()
     {
@@ -520,7 +539,7 @@ class CollectionItem
      */
     public function addTranslation(\AppBundle\Entity\Translation $translation)
     {
-        $this->translations[] = $translation;
+        $this->translation[] = $translation;
 
         return $this;
     }
@@ -532,17 +551,17 @@ class CollectionItem
      */
     public function removeTranslation(\AppBundle\Entity\Translation $translation)
     {
-        $this->translations->removeElement($translation);
+        $this->translation->removeElement($translation);
     }
 
     /**
-     * Get translations
+     * Get translation
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTranslations()
+    public function getTranslation()
     {
-        return $this->translations;
+        return $this->translation;
     }
 
     /**
@@ -578,7 +597,7 @@ class CollectionItem
      */
     public function addItemType(\AppBundle\Entity\ItemType $itemType)
     {
-        $this->itemTypes[] = $itemType;
+        $this->itemType[] = $itemType;
 
         return $this;
     }
@@ -590,16 +609,45 @@ class CollectionItem
      */
     public function removeItemType(\AppBundle\Entity\ItemType $itemType)
     {
-        $this->itemTypes->removeElement($itemType);
+        $this->itemType->removeElement($itemType);
     }
 
     /**
-     * Get itemTypes
+     * Get itemType
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getItemTypes()
+    public function getItemType()
     {
-        return $this->itemTypes;
+        return $this->itemType;
+    }
+
+    /**
+     * Set image
+     *
+     * @param File $image
+     *
+     * @return CollectionItem
+     */
+    public function setImage(File $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return File
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function __toString()
+    {
+        return $this->getNameEng().'/'.$this->getNameUkr().' ('.$this->getYear().')';
     }
 }

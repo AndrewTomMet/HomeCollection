@@ -26,7 +26,7 @@ class Translation
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="CollectionItem", inversedBy="translations")
+     * @ORM\ManyToMany(targetEntity="CollectionItem", inversedBy="translation")
      */
     private $collectionItems;
     /**
@@ -103,5 +103,10 @@ class Translation
     public function getCollectionItems()
     {
         return $this->collectionItems;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }
