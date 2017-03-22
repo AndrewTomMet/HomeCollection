@@ -26,7 +26,8 @@ class CollectionItem
     private $collectionType;
     /**
      * тип ітема (серіал, кремінал, комедія) (онлайн, офлайн)
-     * @ORM\ManyToMany(targetEntity="ItemType", mappedBy="collectionItems")
+     * @ORM\ManyToMany(targetEntity="ItemType", indexBy="collectionItems")
+     * @ORM\JoinTable(name="itemtype_collection")
      */
     private $itemType;
     /**
@@ -63,7 +64,8 @@ class CollectionItem
     private $bitrate;
     /**
      * переводи
-     * @ORM\ManyToMany(targetEntity="Translation", mappedBy="collectionItems")
+     * @ORM\ManyToMany(targetEntity="Translation", indexBy="collectionItems")
+     * @ORM\JoinTable(name="translation_collection")
      */
     private $translation;
     /**
@@ -126,14 +128,14 @@ class CollectionItem
      */
     private $image;
 
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->translation = new \Doctrine\Common\Collections\ArrayCollection();
         $this->itemType = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->createdAt = new \DateTime();
+        $this->translation = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -197,7 +199,7 @@ class CollectionItem
     /**
      * Set year
      *
-     * @param int $year
+     * @param integer $year
      *
      * @return CollectionItem
      */
@@ -211,7 +213,7 @@ class CollectionItem
     /**
      * Get year
      *
-     * @return int
+     * @return integer
      */
     public function getYear()
     {
@@ -483,6 +485,30 @@ class CollectionItem
     }
 
     /**
+     * Set image
+     *
+     * @param string $image
+     *
+     * @return CollectionItem
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
      * Set collectionType
      *
      * @param \AppBundle\Entity\CollectionType $collectionType
@@ -504,6 +530,40 @@ class CollectionItem
     public function getCollectionType()
     {
         return $this->collectionType;
+    }
+
+    /**
+     * Add itemType
+     *
+     * @param \AppBundle\Entity\ItemType $itemType
+     *
+     * @return CollectionItem
+     */
+    public function addItemType(\AppBundle\Entity\ItemType $itemType)
+    {
+        $this->itemType[] = $itemType;
+
+        return $this;
+    }
+
+    /**
+     * Remove itemType
+     *
+     * @param \AppBundle\Entity\ItemType $itemType
+     */
+    public function removeItemType(\AppBundle\Entity\ItemType $itemType)
+    {
+        $this->itemType->removeElement($itemType);
+    }
+
+    /**
+     * Get itemType
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getItemType()
+    {
+        return $this->itemType;
     }
 
     /**
@@ -565,16 +625,6 @@ class CollectionItem
     }
 
     /**
-     * Get user
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
      * Set user
      *
      * @param \AppBundle\Entity\User $user
@@ -589,65 +639,12 @@ class CollectionItem
     }
 
     /**
-     * Add itemType
+     * Get user
      *
-     * @param \AppBundle\Entity\ItemType $itemType
-     *
-     * @return CollectionItem
+     * @return \AppBundle\Entity\User
      */
-    public function addItemType(\AppBundle\Entity\ItemType $itemType)
+    public function getUser()
     {
-        $this->itemType[] = $itemType;
-
-        return $this;
-    }
-
-    /**
-     * Remove itemType
-     *
-     * @param \AppBundle\Entity\ItemType $itemType
-     */
-    public function removeItemType(\AppBundle\Entity\ItemType $itemType)
-    {
-        $this->itemType->removeElement($itemType);
-    }
-
-    /**
-     * Get itemType
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getItemType()
-    {
-        return $this->itemType;
-    }
-
-    /**
-     * Set image
-     *
-     * @param File $image
-     *
-     * @return CollectionItem
-     */
-    public function setImage(File $image = null)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return File
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    public function __toString()
-    {
-        return $this->getNameEng().'/'.$this->getNameUkr().' ('.$this->getYear().')';
+        return $this->user;
     }
 }
