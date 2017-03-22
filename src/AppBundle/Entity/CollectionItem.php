@@ -18,36 +18,45 @@ class CollectionItem
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
+     * тип колекціі (фільм книжка гра)
      * @ORM\ManyToOne(targetEntity="CollectionType")
      */
     private $collectionType;
     /**
+     * тип ітема (серіал, кремінал, комедія) (онлайн, офлайн)
+     * @ORM\ManyToMany(targetEntity="ItemType", mappedBy="collectionItems")
+     */
+    private $itemTypes;
+    /**
+     * Англійска назва
      * @ORM\Column(type="string", length=100, nullable=false)
      * @Assert\NotBlank(message = "nameEng.not_blank")
      */
     private $nameEng;
     /**
+     * назва на укр якщо є
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $nameUkr;
-
     /**
+     * рік створення
      * @ORM\Column(type="date", nullable=true)
      * @Assert\Date()
      */
     private $year;
     /**
+     * розширення (для фільмів)
      * @ORM\ManyToOne(targetEntity="Resolution")
      */
     private $resolution;
     /**
-     * @ORM\Column(type="integer")
+     * біт рейт (для фільмів)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $bitrate;
-
     /**
+     * переводи
      * @ORM\ManyToMany(targetEntity="Translation", mappedBy="collectionItems")
      */
     private $translations;
@@ -89,6 +98,7 @@ class CollectionItem
      */
     private $user;
     /**
+     * флаг подивився, виграв, прочитав
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $completed;
@@ -104,6 +114,7 @@ class CollectionItem
     public function __construct()
     {
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->itemTypes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -535,30 +546,6 @@ class CollectionItem
     }
 
     /**
-     * Add user
-     *
-     * @param \AppBundle\Entity\User $user
-     *
-     * @return CollectionItem
-     */
-    public function addUser(\AppBundle\Entity\User $user)
-    {
-        $this->user[] = $user;
-
-        return $this;
-    }
-
-    /**
-     * Remove user
-     *
-     * @param \AppBundle\Entity\User $user
-     */
-    public function removeUser(\AppBundle\Entity\User $user)
-    {
-        $this->user->removeElement($user);
-    }
-
-    /**
      * Get user
      *
      * @return \Doctrine\Common\Collections\Collection
@@ -580,5 +567,39 @@ class CollectionItem
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * Add itemType
+     *
+     * @param \AppBundle\Entity\ItemType $itemType
+     *
+     * @return CollectionItem
+     */
+    public function addItemType(\AppBundle\Entity\ItemType $itemType)
+    {
+        $this->itemTypes[] = $itemType;
+
+        return $this;
+    }
+
+    /**
+     * Remove itemType
+     *
+     * @param \AppBundle\Entity\ItemType $itemType
+     */
+    public function removeItemType(\AppBundle\Entity\ItemType $itemType)
+    {
+        $this->itemTypes->removeElement($itemType);
+    }
+
+    /**
+     * Get itemTypes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getItemTypes()
+    {
+        return $this->itemTypes;
     }
 }
