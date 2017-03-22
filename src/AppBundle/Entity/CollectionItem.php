@@ -26,7 +26,7 @@ class CollectionItem
     private $collectionType;
     /**
      * тип ітема (серіал, кремінал, комедія) (онлайн, офлайн)
-     * @ORM\ManyToMany(targetEntity="ItemType", indexBy="collectionItems")
+     * @ORM\ManyToMany(targetEntity="ItemType", inversedBy="collectionItems")
      * @ORM\JoinTable(name="itemtype_collection")
      */
     private $itemType;
@@ -64,7 +64,7 @@ class CollectionItem
     private $bitrate;
     /**
      * переводи
-     * @ORM\ManyToMany(targetEntity="Translation", indexBy="collectionItems")
+     * @ORM\ManyToMany(targetEntity="Translation", inversedBy="collectionItems")
      * @ORM\JoinTable(name="translation_collection")
      */
     private $translation;
@@ -91,15 +91,15 @@ class CollectionItem
      */
     private $createdAt;
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $ratingOwn;
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $ratingImgb;
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $ratingKinopoisk;
     /**
@@ -120,9 +120,9 @@ class CollectionItem
     /**
      * @ORM\Column(type="blob", nullable=true)
      * @Assert\Image(
-     *     minWidth = 200,
+     *     minWidth = 1,
      *     maxWidth = 400,
-     *     minHeight = 200,
+     *     minHeight = 1,
      *     maxHeight = 400
      * )
      */
@@ -367,7 +367,7 @@ class CollectionItem
     /**
      * Set ratingOwn
      *
-     * @param string $ratingOwn
+     * @param float $ratingOwn
      *
      * @return CollectionItem
      */
@@ -381,7 +381,7 @@ class CollectionItem
     /**
      * Get ratingOwn
      *
-     * @return string
+     * @return float
      */
     public function getRatingOwn()
     {
@@ -391,7 +391,7 @@ class CollectionItem
     /**
      * Set ratingImgb
      *
-     * @param string $ratingImgb
+     * @param float $ratingImgb
      *
      * @return CollectionItem
      */
@@ -405,7 +405,7 @@ class CollectionItem
     /**
      * Get ratingImgb
      *
-     * @return string
+     * @return float
      */
     public function getRatingImgb()
     {
@@ -415,7 +415,7 @@ class CollectionItem
     /**
      * Set ratingKinopoisk
      *
-     * @param string $ratingKinopoisk
+     * @param float $ratingKinopoisk
      *
      * @return CollectionItem
      */
@@ -429,7 +429,7 @@ class CollectionItem
     /**
      * Get ratingKinopoisk
      *
-     * @return string
+     * @return float
      */
     public function getRatingKinopoisk()
     {
