@@ -7,7 +7,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-class UserAdmin extends AbstractAdmin
+class TranslationAdmin extends AbstractAdmin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -19,11 +19,17 @@ class UserAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('name');
+        $datagridMapper
+            ->add('name')
+            ->add('collectionItems', null, [], 'entity', ['class' => 'AppBundle\Entity\CollectionItem', 'required' => false, 'multiple' => true])
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('name');
+        $listMapper
+            ->addIdentifier('name')
+            ->add('collectionItems', 'entity', ['class' => 'AppBundle\Entity\CollectionItem', 'required' => false, 'multiple' => true])
+        ;
     }
 }

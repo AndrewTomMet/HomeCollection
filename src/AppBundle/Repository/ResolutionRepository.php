@@ -2,8 +2,9 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
 
-class ResolutionRepository
+class ResolutionRepository extends EntityRepository
 {
 
 }

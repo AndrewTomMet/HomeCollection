@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Class Collection
@@ -41,8 +42,13 @@ class CollectionItem
     private $nameUkr;
     /**
      * рік створення
-     * @ORM\Column(type="date", nullable=true)
-     * @Assert\Date()
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Range(
+     *      min = 1900,
+     *      max = 3000,
+     *      minMessage = "Не меньше ніж {{ limit }}",
+     *      maxMessage = "Не більше ніж {{ limit }}"
+     * )
      */
     private $year;
     /**
@@ -66,6 +72,7 @@ class CollectionItem
     private $pathLocal;
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Url()
      */
     private $pathDownload;
     /**
@@ -109,12 +116,24 @@ class CollectionItem
     private $completedAt;
 
     /**
+     * @ORM\Column(type="blob", nullable=true)
+     * @Assert\Image(
+     *     minWidth = 200,
+     *     maxWidth = 400,
+     *     minHeight = 200,
+     *     maxHeight = 400
+     * )
+     */
+    private $image;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->itemTypes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     /**
@@ -178,7 +197,7 @@ class CollectionItem
     /**
      * Set year
      *
-     * @param \DateTime $year
+     * @param int $year
      *
      * @return CollectionItem
      */
@@ -192,7 +211,7 @@ class CollectionItem
     /**
      * Get year
      *
-     * @return \DateTime
+     * @return int
      */
     public function getYear()
     {
@@ -601,5 +620,34 @@ class CollectionItem
     public function getItemTypes()
     {
         return $this->itemTypes;
+    }
+
+    /**
+     * Set image
+     *
+     * @param File $image
+     *
+     * @return CollectionItem
+     */
+    public function setImage(File $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return File
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function __toString()
+    {
+        return $this->getNameEng().'/'.$this->getNameUkr().' ('.$this->getYear().')';
     }
 }

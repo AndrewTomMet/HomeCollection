@@ -4,8 +4,38 @@ parameters:
     #parameter_name: value
 
 services:
+    admin.collection_item:
+        class: AppBundle\Admin\CollectionItemAdmin
+        arguments: [~, AppBundle\Entity\CollectionItem, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Запис }
+
     admin.user:
         class: AppBundle\Admin\UserAdmin
         arguments: [~, AppBundle\Entity\User, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: User }
+            - { name: sonata.admin, manager_type: orm, label: Користувач }
+
+    admin.collection_type:
+        class: AppBundle\Admin\CollectionTypeAdmin
+        arguments: [~, AppBundle\Entity\CollectionType, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Тип колекціі }
+
+    admin.item_type:
+        class: AppBundle\Admin\ItemTypeAdmin
+        arguments: [~, AppBundle\Entity\ItemType, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Тип запису }
+
+    admin.translation:
+        class: AppBundle\Admin\TranslationAdmin
+        arguments: [~, AppBundle\Entity\Translation, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Переклад }
+
+    admin.resolution:
+        class: AppBundle\Admin\ResolutionAdmin
+        arguments: [~, AppBundle\Entity\Resolution, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Resolution }

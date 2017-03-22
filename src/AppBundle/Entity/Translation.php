@@ -104,4 +104,9 @@ class Translation
     {
         return $this->collectionItems;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

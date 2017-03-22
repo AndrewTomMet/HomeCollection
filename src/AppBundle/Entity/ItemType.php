@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,7 +35,7 @@ class ItemType
      */
     public function __construct()
     {
-        $this->collectionItems = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->collectionItems = new ArrayCollection();
     }
 
     /**
@@ -103,5 +104,10 @@ class ItemType
     public function getCollectionItems()
     {
         return $this->collectionItems;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }
