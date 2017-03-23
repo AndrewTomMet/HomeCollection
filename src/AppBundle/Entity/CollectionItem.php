@@ -122,10 +122,9 @@ class CollectionItem
      */
     private $completedAt;
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $imageName;
-
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      * @Vich\UploadableField(mapping="collection_image", fileNameProperty="imageName")
@@ -140,6 +139,7 @@ class CollectionItem
     {
         $this->itemType = new \Doctrine\Common\Collections\ArrayCollection();
         $this->translation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     /**
