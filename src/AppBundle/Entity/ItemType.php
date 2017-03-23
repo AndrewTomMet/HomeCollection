@@ -27,15 +27,16 @@ class ItemType
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="CollectionItem", inversedBy="itemTypes")
+     * @ORM\ManyToMany(targetEntity="CollectionItem", mappedBy="itemType")
      */
     private $collectionItems;
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->collectionItems = new ArrayCollection();
+        $this->collectionItems = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -106,6 +107,9 @@ class ItemType
         return $this->collectionItems;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getName();
