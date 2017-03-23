@@ -2,11 +2,11 @@
 
 namespace AppBundle\Admin;
 
-use AppBundle\AppBundle;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use AppBundle\DBAL\Types\CollectionItemStatusType;
 
 class CollectionItemAdmin extends AbstractAdmin
 {
@@ -15,7 +15,7 @@ class CollectionItemAdmin extends AbstractAdmin
         $formMapper
             ->tab('Інформація')
                 ->with('Офіційна', ['class' => 'col-md-4'])
-//                    ->add('image')
+                    ->add('imageFile', 'file', ['required' => false])
                     ->add('nameEng')
                     ->add('nameUkr')
                     ->add('year')
@@ -33,7 +33,7 @@ class CollectionItemAdmin extends AbstractAdmin
                     ->add('pathLocal')
                     ->add('pathDownload')
                     ->add('descriptionMy')
-                    ->add('completed')
+                    ->add('status')
                     ->add('completedAt', 'date', ['widget' => 'text', 'required' => false, 'format' => 'd M y', 'placeholder' => 'd m y'])
                 ->end()
             ->end()
@@ -60,21 +60,35 @@ class CollectionItemAdmin extends AbstractAdmin
             ->add('translation')
             ->add('user')
             ->add('year')
+            ->add(
+                'status',
+                'doctrine_orm_choice',
+                [],
+                'choice',
+                ['choices' => CollectionItemStatusType::getChoices()])
+            ->add('completedAt')
         ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-//            ->add('image')
+            ->add('imageFile')
             ->add('collectionType', null, ['label' => 'тип коллекціі'])
             ->addIdentifier('nameEng', null, ['label' => 'оригінальна назва'])
             ->addIdentifier('nameUkr', null, ['label' => 'переклад назви'])
             ->add('year', null, ['label' => 'рік створення'])
-            ->add('completed', null, ['label' => 'ознака завершення'])
             ->add('user')
             ->add('translation')
             ->add('itemType')
+            ->add('getStatusReadable')
+            ->add('completedAt')
+            ->add('_action', 'actions', [
+                'actions'   => [
+                    'edit'      => [],
+                    'delete'    => [],
+                ],
+            ])
         ;
     }
 }
