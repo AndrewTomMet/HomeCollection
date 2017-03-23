@@ -15,20 +15,21 @@ class CollectionItemAdmin extends AbstractAdmin
         $formMapper
             ->tab('Інформація')
                 ->with('Офіційна', ['class' => 'col-md-4'])
-                    ->add('image')
+//                    ->add('image')
                     ->add('nameEng')
                     ->add('nameUkr')
                     ->add('year')
-                    ->add('itemTypes', 'entity', ['class' => 'AppBundle\Entity\ItemType', 'multiple' => true, 'required' => false] )
-                    ->add('translations', 'entity', ['class' => 'AppBundle\Entity\Translation', 'multiple' => true, 'required' => false] )
+                    ->add('itemType', 'sonata_type_model', ['multiple' => true, 'required' => false] )
+                    ->add('translation', 'sonata_type_model', ['multiple' => true, 'required' => false] )
                     ->add('descriptionOfficial')
                 ->end()
-                ->with('Рейтинги', ['class' => 'col-md-4'])
+                ->with('Рейтинги', ['class' => 'col-md-2'])
                     ->add('ratingImgb')
                     ->add('ratingKinopoisk')
+                    ->add('ratingOwn')
                 ->end()
                 ->with('Користувача', ['class' => 'col-md-4'])
-                    ->add('ratingOwn')
+
                     ->add('pathLocal')
                     ->add('pathDownload')
                     ->add('descriptionMy')
@@ -51,16 +52,29 @@ class CollectionItemAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('nameEng');
+        $datagridMapper
+            ->add('collectionType')
+            ->add('nameEng')
+            ->add('nameUkr')
+            ->add('itemType')
+            ->add('translation')
+            ->add('user')
+            ->add('year')
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+//            ->add('image')
             ->add('collectionType', null, ['label' => 'тип коллекціі'])
             ->addIdentifier('nameEng', null, ['label' => 'оригінальна назва'])
-            ->add('year', null, ['label' => 'рік створення', 'align' => 'center'])
-            ->add('completed', null, ['label' => 'ознака завершення', 'align' => 'center'])
+            ->addIdentifier('nameUkr', null, ['label' => 'переклад назви'])
+            ->add('year', null, ['label' => 'рік створення'])
+            ->add('completed', null, ['label' => 'ознака завершення'])
+            ->add('user')
+            ->add('translation')
+            ->add('itemType')
         ;
     }
 }
