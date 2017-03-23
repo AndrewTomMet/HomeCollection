@@ -58,14 +58,14 @@ doctrine:
 
 vich_uploader:
     db_driver: orm
-
     mappings:
         collection_image:
             uri_prefix:         /images/collection
             upload_destination: '%kernel.root_dir%/../web/images/collection'
-            inject_on_load:     false
+            inject_on_load:     true
             delete_on_update:   true
             delete_on_remove:   true
+            namer:              vich_uploader.namer_uniqid
 
 # Swiftmailer Configuration
 swiftmailer:

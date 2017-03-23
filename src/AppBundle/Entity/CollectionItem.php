@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\DBAL\Types\CollectionItemStatusType;
 use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class Collection
@@ -129,9 +128,7 @@ class CollectionItem
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     * @Assert\File(maxSize="6000000")
-     * @Assert\Image
-     * @Vich\UploadableField(mapping="item_image", fileNameProperty="imageName")
+     * @Vich\UploadableField(mapping="collection_image", fileNameProperty="imageName")
      * @var File $imageFile
      */
     private $imageFile;
@@ -688,15 +685,15 @@ class CollectionItem
      *
      * @return CollectionItem
      */
-    public function setImageFile($image = null)
+    public function setImageFile(File $image = null)
     {
         $this->imageFile = $image;
-        //$this->imageFile->move();
+
         return $this;
     }
 
     /**
-     * @return UploadedFile|null
+     * @return File|null
      */
     public function getImageFile()
     {
