@@ -106,6 +106,9 @@ class Translation
         return $this->collectionItems;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getName();

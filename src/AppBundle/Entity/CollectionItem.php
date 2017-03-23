@@ -5,11 +5,15 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
+use AppBundle\DBAL\Types\CollectionItemStatusType;
+use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Class Collection
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CollectionItemRepository")
  * @ORM\Table(name="collection_items")
+ * @Vich\Uploadable
  */
 class CollectionItem
 {
@@ -32,13 +36,13 @@ class CollectionItem
     private $itemType;
     /**
      * Англійска назва
-     * @ORM\Column(type="string", length=100, nullable=false)
+     * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank(message = "nameEng.not_blank")
      */
     private $nameEng;
     /**
      * назва на укр якщо є
-     * @ORM\Column(type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $nameUkr;
     /**
@@ -69,11 +73,11 @@ class CollectionItem
      */
     private $translation;
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $pathLocal;
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url()
      */
     private $pathDownload;
@@ -107,27 +111,27 @@ class CollectionItem
      */
     private $user;
     /**
-     * флаг подивився, виграв, прочитав
-     * @ORM\Column(type="boolean", nullable=true)
+     * флаг статусу елемента
+     * @ORM\Column(type="CollectionItemStatusType", nullable=false)
+     * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\CollectionItemStatusType")
      */
-    private $completed;
+    private $status;
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Assert\Date()
      */
     private $completedAt;
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $imageName;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
-     * @Assert\Image(
-     *     minWidth = 1,
-     *     maxWidth = 400,
-     *     minHeight = 1,
-     *     maxHeight = 400
-     * )
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     * @Vich\UploadableField(mapping="collection_image", fileNameProperty="imageName")
+     * @var File $imageFile
      */
-    private $image;
-
+    private $imageFile;
 
     /**
      * Constructor
@@ -437,27 +441,27 @@ class CollectionItem
     }
 
     /**
-     * Set completed
+     * Set status
      *
-     * @param boolean $completed
+     * @param CollectionItemStatusType $status
      *
      * @return CollectionItem
      */
-    public function setCompleted($completed)
+    public function setStatus($status)
     {
-        $this->completed = $completed;
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * Get completed
+     * Get status
      *
-     * @return boolean
+     * @return CollectionItemStatusType
      */
-    public function getCompleted()
+    public function getStatus()
     {
-        return $this->completed;
+        return $this->status;
     }
 
     /**
@@ -482,30 +486,6 @@ class CollectionItem
     public function getCompletedAt()
     {
         return $this->completedAt;
-    }
-
-    /**
-     * Set image
-     *
-     * @param string $image
-     *
-     * @return CollectionItem
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
     }
 
     /**
@@ -646,5 +626,77 @@ class CollectionItem
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getStatusReadable()
+    {
+        return CollectionItemStatusType::getReadableValue($this->getStatus());
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        if (!empty($this->getNameUkr())) {
+
+            return $this->getNameEng().'/'.$this->getNameUkr().' ('.$this->getYear().')';
+        } else {
+
+            return $this->getNameEng().' ('.$this->getYear().')';
+        }
+    }
+
+    /**
+     * Set imageName
+     *
+     * @param string $imageName
+     *
+     * @return CollectionItem
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * Get imageName
+     *
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     *
+     * @return CollectionItem
+     */
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
     }
 }
