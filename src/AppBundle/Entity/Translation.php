@@ -26,9 +26,10 @@ class Translation
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="CollectionItem", inversedBy="translations")
+     * @ORM\ManyToMany(targetEntity="CollectionItem", mappedBy="translation")
      */
     private $collectionItems;
+
     /**
      * Constructor
      */

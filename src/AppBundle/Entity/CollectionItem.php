@@ -26,9 +26,10 @@ class CollectionItem
     private $collectionType;
     /**
      * тип ітема (серіал, кремінал, комедія) (онлайн, офлайн)
-     * @ORM\ManyToMany(targetEntity="ItemType", mappedBy="collectionItems")
+     * @ORM\ManyToMany(targetEntity="ItemType", inversedBy="collectionItems")
+     * @ORM\JoinTable(name="itemtype_collection")
      */
-    private $itemTypes;
+    private $itemType;
     /**
      * Англійска назва
      * @ORM\Column(type="string", length=100, nullable=false)
@@ -63,9 +64,10 @@ class CollectionItem
     private $bitrate;
     /**
      * переводи
-     * @ORM\ManyToMany(targetEntity="Translation", mappedBy="collectionItems")
+     * @ORM\ManyToMany(targetEntity="Translation", inversedBy="collectionItems")
+     * @ORM\JoinTable(name="translation_collection")
      */
-    private $translations;
+    private $translation;
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -89,15 +91,15 @@ class CollectionItem
      */
     private $createdAt;
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $ratingOwn;
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $ratingImgb;
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $ratingKinopoisk;
     /**
@@ -118,22 +120,22 @@ class CollectionItem
     /**
      * @ORM\Column(type="blob", nullable=true)
      * @Assert\Image(
-     *     minWidth = 200,
+     *     minWidth = 1,
      *     maxWidth = 400,
-     *     minHeight = 200,
+     *     minHeight = 1,
      *     maxHeight = 400
      * )
      */
     private $image;
+
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->itemTypes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->createdAt = new \DateTime();
+        $this->itemType = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translation = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -197,7 +199,7 @@ class CollectionItem
     /**
      * Set year
      *
-     * @param int $year
+     * @param integer $year
      *
      * @return CollectionItem
      */
@@ -211,7 +213,7 @@ class CollectionItem
     /**
      * Get year
      *
-     * @return int
+     * @return integer
      */
     public function getYear()
     {
@@ -365,7 +367,7 @@ class CollectionItem
     /**
      * Set ratingOwn
      *
-     * @param string $ratingOwn
+     * @param float $ratingOwn
      *
      * @return CollectionItem
      */
@@ -379,7 +381,7 @@ class CollectionItem
     /**
      * Get ratingOwn
      *
-     * @return string
+     * @return float
      */
     public function getRatingOwn()
     {
@@ -389,7 +391,7 @@ class CollectionItem
     /**
      * Set ratingImgb
      *
-     * @param string $ratingImgb
+     * @param float $ratingImgb
      *
      * @return CollectionItem
      */
@@ -403,7 +405,7 @@ class CollectionItem
     /**
      * Get ratingImgb
      *
-     * @return string
+     * @return float
      */
     public function getRatingImgb()
     {
@@ -413,7 +415,7 @@ class CollectionItem
     /**
      * Set ratingKinopoisk
      *
-     * @param string $ratingKinopoisk
+     * @param float $ratingKinopoisk
      *
      * @return CollectionItem
      */
@@ -427,7 +429,7 @@ class CollectionItem
     /**
      * Get ratingKinopoisk
      *
-     * @return string
+     * @return float
      */
     public function getRatingKinopoisk()
     {
@@ -483,6 +485,30 @@ class CollectionItem
     }
 
     /**
+     * Set image
+     *
+     * @param string $image
+     *
+     * @return CollectionItem
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
      * Set collectionType
      *
      * @param \AppBundle\Entity\CollectionType $collectionType
@@ -504,6 +530,40 @@ class CollectionItem
     public function getCollectionType()
     {
         return $this->collectionType;
+    }
+
+    /**
+     * Add itemType
+     *
+     * @param \AppBundle\Entity\ItemType $itemType
+     *
+     * @return CollectionItem
+     */
+    public function addItemType(\AppBundle\Entity\ItemType $itemType)
+    {
+        $this->itemType[] = $itemType;
+
+        return $this;
+    }
+
+    /**
+     * Remove itemType
+     *
+     * @param \AppBundle\Entity\ItemType $itemType
+     */
+    public function removeItemType(\AppBundle\Entity\ItemType $itemType)
+    {
+        $this->itemType->removeElement($itemType);
+    }
+
+    /**
+     * Get itemType
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getItemType()
+    {
+        return $this->itemType;
     }
 
     /**
@@ -539,7 +599,7 @@ class CollectionItem
      */
     public function addTranslation(\AppBundle\Entity\Translation $translation)
     {
-        $this->translations[] = $translation;
+        $this->translation[] = $translation;
 
         return $this;
     }
@@ -551,27 +611,17 @@ class CollectionItem
      */
     public function removeTranslation(\AppBundle\Entity\Translation $translation)
     {
-        $this->translations->removeElement($translation);
+        $this->translation->removeElement($translation);
     }
 
     /**
-     * Get translations
+     * Get translation
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTranslations()
+    public function getTranslation()
     {
-        return $this->translations;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUser()
-    {
-        return $this->user;
+        return $this->translation;
     }
 
     /**
@@ -589,65 +639,12 @@ class CollectionItem
     }
 
     /**
-     * Add itemType
+     * Get user
      *
-     * @param \AppBundle\Entity\ItemType $itemType
-     *
-     * @return CollectionItem
+     * @return \AppBundle\Entity\User
      */
-    public function addItemType(\AppBundle\Entity\ItemType $itemType)
+    public function getUser()
     {
-        $this->itemTypes[] = $itemType;
-
-        return $this;
-    }
-
-    /**
-     * Remove itemType
-     *
-     * @param \AppBundle\Entity\ItemType $itemType
-     */
-    public function removeItemType(\AppBundle\Entity\ItemType $itemType)
-    {
-        $this->itemTypes->removeElement($itemType);
-    }
-
-    /**
-     * Get itemTypes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getItemTypes()
-    {
-        return $this->itemTypes;
-    }
-
-    /**
-     * Set image
-     *
-     * @param File $image
-     *
-     * @return CollectionItem
-     */
-    public function setImage(File $image = null)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return File
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    public function __toString()
-    {
-        return $this->getNameEng().'/'.$this->getNameUkr().' ('.$this->getYear().')';
+        return $this->user;
     }
 }
