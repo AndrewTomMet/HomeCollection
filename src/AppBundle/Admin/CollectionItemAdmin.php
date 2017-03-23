@@ -78,11 +78,11 @@ class CollectionItemAdmin extends AbstractAdmin
             ->addIdentifier('nameEng', null, ['label' => 'оригінальна назва'])
             ->addIdentifier('nameUkr', null, ['label' => 'переклад назви'])
             ->add('year', null, ['label' => 'рік створення'])
-            ->add('user')
-            ->add('translation')
-            ->add('itemType')
-            ->add('getStatusReadable')
-            ->add('completedAt')
+            ->add('user', null, ['label' => 'користувач'])
+            ->add('translation', null, ['label' => 'переклади'])
+            ->add('itemType', null, ['label' => 'жанр'])
+            ->add('getStatusReadable', null, ['label' => 'статус'])
+            ->add('completedAt', null, ['label' => 'дата статуса'])
             ->add('_action', 'actions', [
                 'actions'   => [
                     'edit'      => [],
