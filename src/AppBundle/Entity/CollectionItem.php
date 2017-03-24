@@ -641,13 +641,15 @@ class CollectionItem
      */
     public function __toString()
     {
+        $result = $this->getNameEng();
         if (!empty($this->getNameUkr())) {
-
-            return $this->getNameEng().'/'.$this->getNameUkr().' ('.$this->getYear().')';
-        } else {
-
-            return $this->getNameEng().' ('.$this->getYear().')';
+            $result .= '/'.$this->getNameUkr();
         }
+        if (!empty($this->getYear())) {
+            $result .= ' ('.$this->getYear().')';
+        }
+
+        return $result;
     }
 
     /**

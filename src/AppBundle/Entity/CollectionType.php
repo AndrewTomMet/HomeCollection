@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
+use AppBundle\DBAL\Types\CollectionItemTagType;
 
 /**
  * Class CollectionType
@@ -24,6 +26,40 @@ class CollectionType
      * @Assert\NotBlank(message = "collectionType.name.not_blank")
      */
     private $name;
+
+    /**
+     * флаг статусу елемента
+     * @ORM\Column(type="CollectionItemTagType", nullable=false)
+     * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\CollectionItemTagType")
+     */
+    private $type;
+
+    /**
+     * @return CollectionItemTagType | null
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param CollectionItemTagType $type
+     * @return CollectionType
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTypeReadable()
+    {
+        return CollectionItemTagType::getReadableValue($this->getType());
+    }
 
     /**
      * Get id

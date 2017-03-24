@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@AppBundle/Resources/public/css/*' debug=false filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" >
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    {% for item in collection %}
+        <div class="listItem">
+            <a href="{{ path('show_item', {'id': item.id}) }}">
+                {% include '@App/small_image.html.twig' %}
+               <div class="itemName">{{ item.__toString }}</div>
+            </a>
+            {% include '@App/btn_edit.html.twig' %}
+            {% if item.collectionType.type == 'V' %}
+                {% include '@App/btn_video.html.twig' %}
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

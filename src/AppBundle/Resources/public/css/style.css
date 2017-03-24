@@ -1,0 +1,49 @@
+
+.listItem{
+    margin: 5px 3px 3px 5px;
+    border: solid 1px #2e0302;
+    background-color: #e6eaef;
+    height: 160px;
+    width: 500px;
+    float: left;
+    padding: 5px;
+}
+
+.listItemVideo{
+    margin: 5px 3px 3px 5px;
+    border: solid 1px #2e0302;
+    background-color: #e6eaef;
+    height: 160px;
+    width: 115px;
+    float: left;
+    padding: 5px;
+}
+
+video{
+    margin: 5px 3px 3px 5px;
+    border: solid 1px #2e0302;
+}
+
+.itemName{
+    margin-left: 10px;
+    margin-right: 10px;
+    position: relative;
+    top: 70px;
+    font-size: medium;
+}
+
+.itemNameVideo{
+    margin: 10px;
+}
+
+.listImg{
+    float: left;
+    margin-right: 10px;
+}
+
+.btn-edit, .btn-video{
+    position: relative;
+    margin-right: 5px;
+    top: -15px;
+    height: 30px;
+}
