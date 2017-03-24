@@ -1,4 +1,6 @@
 {% include '@App/btn_edit.html.twig' %}
 {% if item.collectionType.type == 'V' %}
     {% include '@App/btn_video.html.twig' %}
+{% elseif item.collectionType.type == 'A' %}
+    {% include '@App/btn_audio.html.twig' %}
 {% endif %}

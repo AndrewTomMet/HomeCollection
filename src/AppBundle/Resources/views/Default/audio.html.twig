@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@AppBundle/Resources/public/css/*' debug=false filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" >
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <h2 class="itemNameVideo">{{ item.__toString }}</h2>
+    <div class="listItemVideo">
+        <a href="{{ path('collectionList')}}">
+            {% include '@App/small_image.html.twig' %}
+        </a>
+    </div>
+    {% if not item.pathLocal is empty %}
+        <audio controls>
+            <source src="{{ item.pathLocal }}" type="audio/ogg">
+            <source src="{{ item.pathLocal }}" type="audio/mpeg">
+            Your browser does not support the audio tag.
+        </audio>
+    {% else %}
+        <div>no audio path</div>
+    {% endif %}
+{% endblock %}

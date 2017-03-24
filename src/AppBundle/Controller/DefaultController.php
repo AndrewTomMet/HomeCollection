@@ -58,4 +58,21 @@ class DefaultController extends Controller
 
         return ['item' => $item];
     }
+
+    /**
+     * @Template()
+     * @Route("/audio/{id}", name="audio_item")
+     * @param int $id
+     * @return array
+     */
+    public function audioAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $item = $em->getRepository(CollectionItem::class)->findOneBy(['id' => $id]);
+        if (!$item) {
+            throw new NotFoundHttpException("item with id ".$id." not founded!");
+        }
+
+        return ['item' => $item];
+    }
 }

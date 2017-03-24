@@ -1,4 +1,10 @@
 {% extends "base.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@AppBundle/Resources/public/css/*' debug=false filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css" >
+    {% endstylesheets %}
+{% endblock %}
 
 {% block body %}
     <h2 class="itemNameVideo">{{ item.__toString }}</h2>
